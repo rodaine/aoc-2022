@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 #![feature(test)]
 #![feature(type_alias_impl_trait)]
 #![feature(drain_filter)]
