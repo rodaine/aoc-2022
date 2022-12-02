@@ -33,7 +33,7 @@ impl From<Shape> for isize {
 impl From<isize> for Shape {
     fn from(value: isize) -> Self {
         use Shape::*;
-        match (value+3)%3 {
+        match value.rem_euclid(3) {
             0 => Rock,
             1 => Paper,
             2 => Scissors,
