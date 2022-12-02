@@ -1,3 +1,4 @@
+use std::cmp::Reverse;
 use std::collections::binary_heap::BinaryHeap;
 use crate::utils::*;
 
@@ -8,8 +9,19 @@ fn total_calories(input: &str) -> impl Iterator<Item=usize> + '_ {
 }
 
 fn solve2(input: &str, n: usize) -> usize {
-    let all: BinaryHeap<usize> = total_calories(input).collect();
-    all.into_iter().take(n).sum()
+    let mut heap = BinaryHeap::with_capacity(n);
+    let cals = total_calories(input).map(Reverse);
+    for ttl in cals {
+        if heap.len() >= n {
+            if let Some(Reverse(prev)) = heap.peek() && *prev >= ttl.0 {
+                continue;
+            }
+            heap.pop();
+        }
+        heap.push(ttl);
+    }
+
+    heap.into_iter().map(|r| r.0).sum()
 }
 
 fn solve1(input: &str) -> usize {
