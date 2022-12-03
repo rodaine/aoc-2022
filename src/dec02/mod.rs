@@ -10,12 +10,12 @@ enum Shape {
 impl Shape {
     fn beats(self) -> Self {
         let val: isize = self.into();
-        Self::from(val-1)
+        Self::from(val - 1)
     }
 
     fn loses_to(self) -> Self {
         let val: isize = self.into();
-        Self::from(val+1)
+        Self::from(val + 1)
     }
 }
 
@@ -90,11 +90,11 @@ impl From<Pair> for Outcome {
         let Pair(opp, me) = value;
 
         if opp == me {
-            return Draw
+            return Draw;
         }
 
         if me.beats() == opp {
-            return Win
+            return Win;
         }
 
         Lose
@@ -149,17 +149,11 @@ fn score(me: Shape, out: Outcome) -> isize {
 }
 
 fn solve1(input: &str) -> isize {
-    file_lines(input)
-        .map(Pair::from)
-        .map(isize::from)
-        .sum()
+    file_lines(input).map(Pair::from).map(isize::from).sum()
 }
 
 fn solve2(input: &str) -> isize {
-    file_lines(input)
-        .map(Target::from)
-        .map(isize::from)
-        .sum()
+    file_lines(input).map(Target::from).map(isize::from).sum()
 }
 
 #[cfg(test)]
