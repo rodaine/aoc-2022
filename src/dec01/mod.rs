@@ -1,8 +1,8 @@
+use crate::utils::*;
 use std::cmp::Reverse;
 use std::collections::binary_heap::BinaryHeap;
-use crate::utils::*;
 
-fn total_calories(input: &str) -> impl Iterator<Item=usize> + '_ {
+fn total_calories(input: &str) -> impl Iterator<Item = usize> + '_ {
     file_groups(input)
         .map(parse_items::<usize>)
         .map(Iterator::sum)
@@ -27,7 +27,6 @@ fn solve2(input: &str, n: usize) -> usize {
 fn solve1(input: &str) -> usize {
     total_calories(input).max().unwrap()
 }
-
 
 #[cfg(test)]
 mod tests {
