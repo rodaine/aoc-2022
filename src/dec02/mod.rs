@@ -1,159 +1,73 @@
 use crate::utils::*;
 
-#[derive(Copy, Clone, Eq, PartialEq)]
-enum Shape {
-    Rock,
-    Paper,
-    Scissors,
-}
+#[derive(Copy, Clone)]
+struct Shape(i8);
 
 impl Shape {
-    fn beats(self) -> Self {
-        let val: isize = self.into();
-        Self::from(val - 1)
+    fn against(self, opp: Self) -> Outcome {
+        Outcome((self.0 - opp.0).rem_euclid(3))
     }
 
-    fn loses_to(self) -> Self {
-        let val: isize = self.into();
-        Self::from(val + 1)
+    fn my_play(self, out: Outcome) -> Self {
+        Self((self.0 + out.0).rem_euclid(3))
     }
-}
 
-impl From<Shape> for isize {
-    fn from(value: Shape) -> Self {
-        use Shape::*;
-        match value {
-            Rock => 0,
-            Paper => 1,
-            Scissors => 2,
-        }
-    }
-}
-
-impl From<isize> for Shape {
-    fn from(value: isize) -> Self {
-        use Shape::*;
-        match value.rem_euclid(3) {
-            0 => Rock,
-            1 => Paper,
-            2 => Scissors,
-            _ => unreachable!(),
-        }
+    fn score(self) -> isize {
+        (1 + self.0) as isize
     }
 }
 
 impl From<&str> for Shape {
     fn from(value: &str) -> Self {
-        use Shape::*;
         match value {
-            "A" | "X" => Rock,
-            "B" | "Y" => Paper,
-            "C" | "Z" => Scissors,
+            "A" | "X" => Self(0), // rock
+            "B" | "Y" => Self(1), // paper
+            "C" | "Z" => Self(2), // scissors
             _ => unreachable!(),
         }
     }
 }
 
-#[derive(Clone, Copy)]
-enum Outcome {
-    Lose,
-    Draw,
-    Win,
-}
+#[derive(Copy, Clone)]
+struct Outcome(i8);
 
-impl From<Outcome> for isize {
-    fn from(value: Outcome) -> isize {
-        use Outcome::*;
-        match value {
-            Lose => 0,
-            Draw => 3,
-            Win => 6,
-        }
+impl Outcome {
+    fn score(self) -> isize {
+        (((1 + self.0) % 3) * 3) as isize
     }
 }
 
 impl From<&str> for Outcome {
     fn from(value: &str) -> Self {
-        use Outcome::*;
         match value {
-            "X" => Lose,
-            "Y" => Draw,
-            "Z" => Win,
+            "X" => Self(2), // lose
+            "Y" => Self(0), // draw
+            "Z" => Self(1), // win
             _ => unreachable!(),
         }
     }
 }
 
-impl From<Pair> for Outcome {
-    fn from(value: Pair) -> Outcome {
-        use Outcome::*;
-        let Pair(opp, me) = value;
-
-        if opp == me {
-            return Draw;
-        }
-
-        if me.beats() == opp {
-            return Win;
-        }
-
-        Lose
-    }
+fn solve_1(input: &str) -> isize {
+    file_lines(input)
+        .map(|s| {
+            let (opp, me) = s.split_once(' ').unwrap();
+            (Shape::from(opp), Shape::from(me))
+        })
+        .map(|(opp, me)| (me, me.against(opp)))
+        .map(|(me, out)| me.score() + out.score())
+        .sum()
 }
 
-#[derive(Copy, Clone)]
-struct Pair(Shape, Shape);
-
-impl From<String> for Pair {
-    fn from(value: String) -> Self {
-        let (o, m) = value.split_once(' ').unwrap();
-        Pair(o.into(), m.into())
-    }
-}
-
-impl From<Pair> for isize {
-    fn from(value: Pair) -> Self {
-        let outcome: Outcome = value.into();
-        score(value.1, outcome)
-    }
-}
-
-struct Target(Shape, Outcome);
-
-impl From<String> for Target {
-    fn from(value: String) -> Self {
-        let (opp, out) = value.split_once(' ').unwrap();
-        Target(opp.into(), out.into())
-    }
-}
-
-impl From<Target> for isize {
-    fn from(value: Target) -> Self {
-        use Outcome::*;
-
-        let Target(opp, out) = value;
-        let me = match out {
-            Lose => opp.beats(),
-            Draw => opp,
-            Win => opp.loses_to(),
-        };
-
-        score(me, out)
-    }
-}
-
-fn score(me: Shape, out: Outcome) -> isize {
-    let m: isize = me.into();
-    let o: isize = out.into();
-    1 + m + o
-}
-
-fn solve1(input: &str) -> isize {
-    file_lines(input).map(Pair::from).map(isize::from).sum()
-}
-
-fn solve2(input: &str) -> isize {
-    file_lines(input).map(Target::from).map(isize::from).sum()
+fn solve_2(input: &str) -> isize {
+    file_lines(input)
+        .map(|s| {
+            let (opp, out) = s.split_once(' ').unwrap();
+            (Shape::from(opp), Outcome::from(out))
+        })
+        .map(|(opp, out)| (opp.my_play(out), out))
+        .map(|(me, out)| me.score() + out.score())
+        .sum()
 }
 
 #[cfg(test)]
@@ -163,24 +77,24 @@ mod tests {
     #[test]
     fn example_1() {
         let input = "src/dec02/example_1.txt";
-        assert_eq!(15, solve1(input))
+        assert_eq!(15, solve_1(input))
     }
 
     #[test]
     fn puzzle_1() {
         let input = "src/dec02/input_1.txt";
-        assert_eq!(11841, solve1(input))
+        assert_eq!(11841, solve_1(input))
     }
 
     #[test]
     fn example_2() {
         let input = "src/dec02/example_1.txt";
-        assert_eq!(12, solve2(input))
+        assert_eq!(12, solve_2(input))
     }
 
     #[test]
     fn puzzle_2() {
         let input = "src/dec02/input_1.txt";
-        assert_eq!(13022, solve2(input))
+        assert_eq!(13022, solve_2(input))
     }
 }
