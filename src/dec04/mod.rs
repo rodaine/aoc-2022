@@ -31,14 +31,14 @@ impl From<String> for Pair {
     }
 }
 
-fn solve1(input: &str) -> usize {
+fn solve_1(input: &str) -> usize {
     file_lines(input)
         .map(Pair::from)
         .filter(Pair::full_overlap)
         .count()
 }
 
-fn solve2(input: &str) -> usize {
+fn solve_2(input: &str) -> usize {
     file_lines(input)
         .map(Pair::from)
         .filter(Pair::any_overlap)
@@ -52,24 +52,24 @@ mod tests {
     #[test]
     fn example_1() {
         let input = "src/dec04/example_1.txt";
-        assert_eq!(2, solve1(input));
+        assert_eq!(2, solve_1(input));
     }
 
     #[test]
     fn puzzle_1() {
         let input = "src/dec04/input_1.txt";
-        assert_eq!(515, solve1(input));
+        assert_eq!(515, solve_1(input));
     }
 
     #[test]
     fn example_2() {
         let input = "src/dec04/example_1.txt";
-        assert_eq!(4, solve2(input));
+        assert_eq!(4, solve_2(input));
     }
 
     #[test]
     fn puzzle_2() {
         let input = "src/dec04/input_1.txt";
-        assert_eq!(883, solve2(input));
+        assert_eq!(883, solve_2(input));
     }
 }

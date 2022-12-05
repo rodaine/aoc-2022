@@ -28,7 +28,7 @@ where
     two_way_intersection(a, b).filter(move |el| c.contains(el))
 }
 
-fn solve1(input: &str) -> u32 {
+fn solve_1(input: &str) -> u32 {
     file_lines(input)
         .map(|l| {
             let (a, b) = l.split_at(l.len() / 2);
@@ -39,7 +39,7 @@ fn solve1(input: &str) -> u32 {
         .sum()
 }
 
-fn solve2(input: &str) -> u32 {
+fn solve_2(input: &str) -> u32 {
     file_lines(input)
         .map(|l| char_set(&l))
         .array_chunks()
@@ -55,24 +55,24 @@ mod tests {
     #[test]
     fn example_1() {
         let input = "src/dec03/example_1.txt";
-        assert_eq!(157, solve1(input))
+        assert_eq!(157, solve_1(input))
     }
 
     #[test]
     fn puzzle_1() {
         let input = "src/dec03/input_1.txt";
-        assert_eq!(7581, solve1(input))
+        assert_eq!(7581, solve_1(input))
     }
 
     #[test]
     fn example_2() {
         let input = "src/dec03/example_1.txt";
-        assert_eq!(70, solve2(input))
+        assert_eq!(70, solve_2(input))
     }
 
     #[test]
     fn puzzle_2() {
         let input = "src/dec03/input_1.txt";
-        assert_eq!(2525, solve2(input))
+        assert_eq!(2525, solve_2(input))
     }
 }

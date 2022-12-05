@@ -20,9 +20,7 @@ DEST="${SOURCE}/../src/${DAY}"
 
 mkdir "$DEST"
 touch "${DEST}/example_1.txt"
-touch "${DEST}/example_2.txt"
 touch "${DEST}/input_1.txt"
-touch "${DEST}/input_2.txt"
 sed "s/__DAY__/${DAY}/" "${SOURCE}/mod.rs.tpl" > "${DEST}/mod.rs"
 echo "mod ${DAY};" >> "${SOURCE}/../src/lib.rs"
 

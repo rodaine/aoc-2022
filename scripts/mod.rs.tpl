@@ -26,13 +26,13 @@ mod tests {
 
     #[test]
     fn example_2() {
-        let input = "src/__DAY__/example_2.txt";
+        let input = "src/__DAY__/example_1.txt";
         assert_eq!(0, solve_2(input));
     }
 
     #[test]
     fn puzzle_2() {
-        let input = "src/__DAY__/input_2.txt";
+        let input = "src/__DAY__/input_1.txt";
         assert_eq!(0, solve_2(input));
     }
 }
