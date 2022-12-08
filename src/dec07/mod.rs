@@ -89,7 +89,8 @@ impl FS {
 
     fn min_to_delete(&self, target: usize) -> usize {
         let at_least = self.dirs.get("/").unwrap().borrow().size - target;
-        self.dirs.values()
+        self.dirs
+            .values()
             .map(|d| d.borrow().size)
             .filter(|&s| s >= at_least)
             .min()
