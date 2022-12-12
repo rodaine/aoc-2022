@@ -4,6 +4,7 @@
 #![feature(drain_filter)]
 #![feature(let_chains)]
 #![feature(iter_array_chunks)]
+#![feature(iter_next_chunk)]
 
 mod dec01;
 mod dec02;
@@ -16,3 +17,4 @@ mod dec08;
 mod dec09;
 mod dec10;
 mod utils;
+mod dec11;
