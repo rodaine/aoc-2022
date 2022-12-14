@@ -44,7 +44,6 @@ impl PacketDatum {
 
 impl From<String> for PacketDatum {
     fn from(value: String) -> Self {
-        eprintln!("{:?}", &value);
         let mut chars = value.chars().peekable();
         PacketDatum::parse_list(&mut chars)
     }
@@ -96,7 +95,7 @@ fn solve_2(input: &str) -> usize {
     let end = List(vec![List(vec![Int(6)])]);
 
     let mut packets: Vec<PacketDatum> = file_lines(input)
-        .filter(|s|!s.is_empty())
+        .filter(|s| !s.is_empty())
         .map(PacketDatum::from)
         .collect();
 
